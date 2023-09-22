@@ -21,7 +21,7 @@ public class TestDriver {
     MapDriver<Object, Text, Text, IntWritable> mapDriver;
     ReduceDriver<Text, IntWritable, Text, IntWritable> reduceDriver;
     MapReduceDriver<Object, Text, Text, IntWritable, Text, IntWritable> mapReduceDriver;
-    
+
     @Before
     public void setUp() {
     	Map mapper = new Map();
@@ -36,7 +36,7 @@ public class TestDriver {
         mapReduceDriver.setMapper(mapper);
         mapReduceDriver.setReducer(reducer);
     }
-    
+
     @Test
     public void testMapper() throws IOException{
     	mapDriver.withInput(new LongWritable(1), new Text("the cat and the blue cat hat"));
@@ -49,7 +49,7 @@ public class TestDriver {
     	mapDriver.withOutput(new Text("hat"), new IntWritable(1));
     	mapDriver.runTest();
     }
-    
+
     @Test
     public void testReducer() throws IOException{
     	List<IntWritable> values = new ArrayList();
@@ -59,7 +59,7 @@ public class TestDriver {
     	reduceDriver.withOutput(new Text("cat"), new IntWritable(2));
     	reduceDriver.runTest();
     }
-    
+
     @Test
     public void testMapperReducer() throws IOException{
         mapReduceDriver.addInput(new LongWritable(1), new Text("the cat and the blue cat hat"));
