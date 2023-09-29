@@ -16,12 +16,14 @@ public class CountMapper extends Mapper<LongWritable, Text, Bigram, LongWritable
     public void map(LongWritable key, Text value, Context context)
     		throws IOException, InterruptedException {
 
-    //String line = value.toString().replaceAll("[^\\\\sa-zA-Z0-9]", "");
+    //normalize to lower case, no punctuation, and remove consecutive spaces
     String line = value.toString().toLowerCase();
     line = line.replaceAll("[^\\sa-zA-Z0-9]", "");
+    line = line.replaceAll("\\s{2,}", " ");
+
     String[] words = line.split(" ");
     
-    if(words.length > 2) {
+    if(words.length >= 2) {
     	for(String word: words) {
     		if(lastWord == null) {
     			lastWord = new Text(word);
