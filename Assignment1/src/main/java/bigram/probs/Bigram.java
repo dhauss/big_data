@@ -1,4 +1,4 @@
-package BigramProbs;
+package bigram.probs;
 
 import java.io.DataInput;
 import java.io.DataOutput;
