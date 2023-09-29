@@ -1,5 +1,39 @@
 package bigram.probs;
 
-public class CountMapper {
+import java.io.IOException;
+
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Mapper.Context;
+
+public class CountMapper extends Mapper<LongWritable, Text, Bigram, LongWritable>{
+	
+	Text lastWord = null;
+	Text curWord = new Text();
+    private final static LongWritable one = new LongWritable(1);
+
+    public void map(LongWritable key, Text value, Context context)
+    		throws IOException, InterruptedException {
+
+    //String line = value.toString().replaceAll("[^\\\\sa-zA-Z0-9]", "");
+    String line = value.toString().toLowerCase();
+    line = line.replaceAll("[^\\sa-zA-Z0-9]", "");
+    String[] words = line.split(" ");
+    
+    if(words.length > 2) {
+    	for(String word: words) {
+    		if(lastWord == null) {
+    			lastWord = new Text(word);
+    		}
+    		else {
+    			curWord.set(word);
+    			context.write(new Bigram(lastWord, curWord), one);
+    			lastWord.set(curWord.toString());
+    		}
+    	}
+    }
+
+    }
 
 }
