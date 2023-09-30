@@ -1,7 +1,6 @@
 /*
 Bigram class adapted from https://www.udemy.com/course/learn-by-example-hadoop-mapreduce/
 */
-
 package bigram.probs;
 
 import java.io.DataInput;
@@ -24,11 +23,10 @@ public class Bigram implements WritableComparable<Bigram>{
 		this.first = first;
 		this.second = second;
 	}
-	
+
 	public Bigram(String first, String second) {
 		this(new Text(first), new Text(second));
 	}
-
 
 	@Override
 	public void write(DataOutput out) throws IOException {
