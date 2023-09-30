@@ -1,3 +1,7 @@
+/*
+Bigram class adapted from https://www.udemy.com/course/learn-by-example-hadoop-mapreduce/
+*/
+
 package bigram.probs;
 
 import java.io.DataInput;

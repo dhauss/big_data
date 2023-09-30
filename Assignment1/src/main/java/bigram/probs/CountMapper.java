@@ -30,6 +30,7 @@ public class CountMapper extends Mapper<LongWritable, Text, Bigram, LongWritable
     		}
     		else {
     			curWord.set(word);
+    			context.getCounter(Driver.COUNTERS.BIGRAMCOUNT).increment(1L);	//increment global bigram counter
     			context.write(new Bigram(lastWord, curWord), one);
     			lastWord.set(curWord.toString());
     		}
