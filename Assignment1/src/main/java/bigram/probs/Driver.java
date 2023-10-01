@@ -43,6 +43,7 @@ public class Driver extends Configured implements Tool{
         countJob.setOutputKeyClass(Bigram.class);
         countJob.setOutputValueClass(LongWritable.class);
 
+        //if countOutPath already exists, remove existing file
         Path countOutPath = new Path(countJobOut);
 		FileSystem fs = FileSystem.get(countConf);
 		if (fs.exists(countOutPath)) {
