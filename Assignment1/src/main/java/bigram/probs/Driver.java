@@ -29,7 +29,8 @@ public class Driver extends Configured implements Tool{
 	@Override
 	public int run(String[] args) throws Exception {
 		String countJobOut = "count-job-out";
-
+		
+		//count number of each bigrams, global counter for total number of bigrams
         Configuration countConf = new Configuration();
         Job countJob = Job.getInstance(countConf);
         countJob.setJobName("BigramCount");
@@ -53,6 +54,7 @@ public class Driver extends Configured implements Tool{
 
         countJob.waitForCompletion(true);
 
+        //mapper only job, calculate probability of each bigram based on total bigram count
         Counters counters = countJob.getCounters();
         Long counter = counters.findCounter(COUNTERS.BIGRAMCOUNT).getValue();
 
@@ -73,8 +75,7 @@ public class Driver extends Configured implements Tool{
         FileInputFormat.addInputPath(probJob, new Path(countJobOut));
         FileOutputFormat.setOutputPath(probJob, new Path(args[1]));
 
-        int exitCode = probJob.waitForCompletion(true) ? 0 : 1;
-        return exitCode;
+        return probJob.waitForCompletion(true) ? 0 : 1;
 	}
 
 }
