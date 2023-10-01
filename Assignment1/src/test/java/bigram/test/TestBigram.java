@@ -38,7 +38,6 @@ public class TestBigram {
         reduceDriver = new ReduceDriver<Bigram, LongWritable, Bigram, LongWritable>();
         reduceDriver.setReducer(reducer1);
 
-        Driver driver = new Driver();
         mapReduceDriver = new MapReduceDriver<LongWritable, Text, Bigram, LongWritable, Bigram, LongWritable>();
         mapReduceDriver.setMapper(mapper1);
         mapReduceDriver.setReducer(reducer1);  
@@ -70,12 +69,12 @@ public class TestBigram {
     @Test
     public void testMapperReducer() throws IOException{
     	mapReduceDriver.addInput(new LongWritable(1), new Text("the, cat aNd;;    the Blue. tHe cat haT./;;"));
-    	mapReduceDriver.addInput(new LongWritable(2), new Text("   haT./;;"));
-    	mapReduceDriver.withOutput(new Bigram("and", "the"), new LongWritable(1));
-    	mapReduceDriver.withOutput(new Bigram("blue", "the"), new LongWritable(1));
-    	mapReduceDriver.withOutput(new Bigram("cat", "and"), new LongWritable(1));
-    	mapReduceDriver.withOutput(new Bigram("cat", "hat"), new LongWritable(1));
-    	mapReduceDriver.withOutput(new Bigram("the", "blue"), new LongWritable(1));
-    	mapReduceDriver.withOutput(new Bigram("the", "cat"), new LongWritable(2));
+    	mapReduceDriver.addOutput(new Bigram("and", "the"), new LongWritable(1));
+    	mapReduceDriver.addOutput(new Bigram("blue", "the"), new LongWritable(1));
+    	mapReduceDriver.addOutput(new Bigram("cat", "and"), new LongWritable(1));
+    	mapReduceDriver.addOutput(new Bigram("cat", "hat"), new LongWritable(1));
+    	mapReduceDriver.addOutput(new Bigram("the", "blue"), new LongWritable(1));
+    	mapReduceDriver.addOutput(new Bigram("the", "cat"), new LongWritable(2));
+    	mapReduceDriver.runTest();
     } 
 }
