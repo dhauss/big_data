@@ -22,7 +22,7 @@ public class CountMapper extends Mapper<LongWritable, Text, Bigram, LongWritable
     	line = line.replaceAll("\\s{2,}", " ");
 
     	String[] words = line.split(" ");
-    
+
     	if(words.length >= 2) {
     		for(String word: words) {
     			if(lastWord == null) {

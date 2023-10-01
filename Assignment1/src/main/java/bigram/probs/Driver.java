@@ -1,12 +1,17 @@
 package bigram.probs;
 
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Counters;
 
@@ -23,27 +28,52 @@ public class Driver extends Configured implements Tool{
 
 	@Override
 	public int run(String[] args) throws Exception {
-        Job job = Job.getInstance(getConf());
-        job.setJobName("BigramCount");
-        job.setJarByClass(Driver.class);
+		String countJobOut = "count-job-out";
 
-        job.setMapperClass(CountMapper.class);
-        job.setCombinerClass(CountReducer.class);
-        job.setReducerClass(CountReducer.class);
+        Configuration countConf = new Configuration();
+        Job countJob = Job.getInstance(countConf);
+        countJob.setJobName("BigramCount");
+        countJob.setJarByClass(Driver.class);
 
-        job.setOutputKeyClass(Bigram.class);
-        job.setOutputValueClass(LongWritable.class);
+        countJob.setMapperClass(CountMapper.class);
+        countJob.setCombinerClass(CountReducer.class);
+        countJob.setReducerClass(CountReducer.class);
 
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        countJob.setOutputKeyClass(Bigram.class);
+        countJob.setOutputValueClass(LongWritable.class);
 
-        int exitCode = job.waitForCompletion(true) ? 0 : 1;
+        Path countOutPath = new Path(countJobOut);
+		FileSystem fs = FileSystem.get(countConf);
+		if (fs.exists(countOutPath)) {
+			fs.delete(countOutPath, true);
+		}
 
-        Counters counters = job.getCounters();
-        long counter = counters.findCounter(COUNTERS.BIGRAMCOUNT).getValue();
-		System.out.printf("Bigram count: %d\n",
-			      counters.findCounter(COUNTERS.BIGRAMCOUNT).getValue());
+        FileInputFormat.addInputPath(countJob, new Path(args[0]));
+        FileOutputFormat.setOutputPath(countJob, countOutPath);
 
+        countJob.waitForCompletion(true);
+
+        Counters counters = countJob.getCounters();
+        Long counter = counters.findCounter(COUNTERS.BIGRAMCOUNT).getValue();
+
+        Configuration conf2 = new Configuration();
+        Job probJob = Job.getInstance(conf2);
+        probJob.setJobName("BigramProb");
+        probJob.setJarByClass(Driver.class);
+        probJob.getConfiguration().setLong(Driver.COUNTERS.BIGRAMCOUNT.name(), counter);
+
+        probJob.setMapperClass(ProbMapper.class);
+        probJob.setCombinerClass(ProbReducer.class);
+        probJob.setReducerClass(ProbReducer.class);
+        probJob.setNumReduceTasks(0);
+
+        probJob.setOutputKeyClass(Bigram.class);
+        probJob.setOutputValueClass(FloatWritable.class);
+
+        FileInputFormat.addInputPath(probJob, new Path(countJobOut));
+        FileOutputFormat.setOutputPath(probJob, new Path(args[1]));
+
+        int exitCode = probJob.waitForCompletion(true) ? 0 : 1;
         return exitCode;
 	}
 
