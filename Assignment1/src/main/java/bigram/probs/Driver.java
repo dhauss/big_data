@@ -66,8 +66,6 @@ public class Driver extends Configured implements Tool{
         probJob.getConfiguration().setLong(Driver.COUNTERS.BIGRAMCOUNT.name(), counter);
 
         probJob.setMapperClass(ProbMapper.class);
-        probJob.setCombinerClass(ProbReducer.class);
-        probJob.setReducerClass(ProbReducer.class);
         probJob.setNumReduceTasks(0);
 
         probJob.setOutputKeyClass(Bigram.class);
