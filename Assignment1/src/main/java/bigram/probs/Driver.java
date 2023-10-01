@@ -77,5 +77,4 @@ public class Driver extends Configured implements Tool{
 
         return probJob.waitForCompletion(true) ? 0 : 1;
 	}
-
 }
