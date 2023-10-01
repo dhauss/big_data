@@ -30,7 +30,7 @@ public class Driver extends Configured implements Tool{
 	public int run(String[] args) throws Exception {
 		String countJobOut = "count-job-out";
 		
-		//count number of each bigrams, global counter for total number of bigrams
+		/////////// count number of each bigrams, global counter for total number of bigrams ///////////
         Configuration countConf = new Configuration();
         Job countJob = Job.getInstance(countConf);
         countJob.setJobName("BigramCount");
@@ -55,15 +55,15 @@ public class Driver extends Configured implements Tool{
 
         countJob.waitForCompletion(true);
 
-        //mapper only job, calculate probability of each bigram based on total bigram count
+        /////////// mapper only job, calculate probability of each bigram based on total bigram count ///////////
         Counters counters = countJob.getCounters();
-        Long counter = counters.findCounter(COUNTERS.BIGRAMCOUNT).getValue();
+        Long counter = counters.findCounter(COUNTERS.BIGRAMCOUNT).getValue();	//save counter from countJob
 
         Configuration conf2 = new Configuration();
         Job probJob = Job.getInstance(conf2);
         probJob.setJobName("BigramProb");
         probJob.setJarByClass(Driver.class);
-        probJob.getConfiguration().setLong(Driver.COUNTERS.BIGRAMCOUNT.name(), counter);
+        probJob.getConfiguration().setLong(Driver.COUNTERS.BIGRAMCOUNT.name(), counter);	//set counter to probJob
 
         probJob.setMapperClass(ProbMapper.class);
         probJob.setNumReduceTasks(0);
