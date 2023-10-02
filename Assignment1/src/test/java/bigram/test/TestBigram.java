@@ -48,6 +48,7 @@ public class TestBigram {
         possibleReduceDriver = new ReduceDriver<Text, Text, Bigram, FloatWritable>();
         possibleReduceDriver.setReducer(reducer2);
 
+        //countJob MapReduce
         mapReduceDriver = new MapReduceDriver<LongWritable, Text, Bigram, LongWritable, Bigram, LongWritable>();
         mapReduceDriver.setMapper(mapper1);
         mapReduceDriver.setReducer(reducer1);  
