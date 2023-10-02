@@ -5,6 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
 
 <dependencies>
+
 	<dependency>
    	 	<groupId>org.apache.hadoop</groupId>
     	<artifactId>hadoop-client</artifactId>
@@ -33,19 +34,30 @@
     	<artifactId>slf4j-simple</artifactId>
     	<version>1.7.5</version>
 	</dependency>
+	
+	  	<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+	<dependency>
+    	<groupId>com.google.guava</groupId>
+    	<artifactId>guava</artifactId>
+    	<version>32.1.2-jre</version>
+	</dependency>
+
 </dependencies>
 
 <build>
+	
     <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.11.0</version>
             <configuration>
                 <source>1.8</source>
                 <target>1.8</target>
             </configuration>
         </plugin>
     </plugins>
+    
 </build>
 
 </project>
