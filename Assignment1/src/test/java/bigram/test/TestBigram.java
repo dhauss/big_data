@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
@@ -14,20 +15,28 @@ import org.junit.Test;
 
 import bigram.probs.Bigram;
 import bigram.probs.CountMapper;
+import bigram.probs.PossibleMapper;
 import bigram.probs.CountReducer;
 
 
 
 public class TestBigram {
     MapDriver<LongWritable, Text, Bigram, LongWritable> mapDriver;
+    MapDriver<LongWritable, Text, Bigram, FloatWritable> possibleMapDriver;
     ReduceDriver<Bigram, LongWritable, Bigram, LongWritable> reduceDriver;
     MapReduceDriver<LongWritable, Text, Bigram, LongWritable, Bigram, LongWritable> mapReduceDriver;
     
     @Before
     public void setUp() {
+    	//countJob Mapper
     	CountMapper mapper1 = new CountMapper();
         mapDriver = new MapDriver<LongWritable, Text, Bigram, LongWritable>();
         mapDriver.setMapper(mapper1);
+
+        //possibleJob Mapper
+        PossibleMapper mapper2 = new PossibleMapper();
+        possibleMapDriver = new MapDriver<LongWritable, Text, Bigram, FloatWritable>();
+        possibleMapDriver.setMapper(mapper2);
 
         CountReducer reducer1 = new CountReducer();
         reduceDriver = new ReduceDriver<Bigram, LongWritable, Bigram, LongWritable>();
@@ -49,6 +58,14 @@ public class TestBigram {
     	mapDriver.withOutput(new Bigram("the", "cat"), new LongWritable(1));
     	mapDriver.withOutput(new Bigram("cat", "hat"), new LongWritable(1));
     	mapDriver.runTest();
+    }
+    
+    @Test
+    public void TestMapper2() throws IOException{
+    	possibleMapDriver.withInput(new LongWritable(1), new Text("possible\tbigram\t.00234"));
+    	possibleMapDriver.withInput(new LongWritable(2), new Text("impossible\tbigram\t.00234"));
+    	possibleMapDriver.withOutput(new Bigram("possible", "bigram"), new FloatWritable(.00234F));
+    	possibleMapDriver.runTest();
     }
 
     @Test
