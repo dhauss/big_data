@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
-public class PossibleMapper extends Mapper<LongWritable, Text, Bigram, FloatWritable> {
+public class PossibleMapper extends Mapper<LongWritable, Text, Text, Text> {
 	
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 		String line = value.toString();
@@ -18,8 +18,8 @@ public class PossibleMapper extends Mapper<LongWritable, Text, Bigram, FloatWrit
 		Float prob = Float.parseFloat(vals[2]);
 		
 		if(first.equals("possible")) {
-			Bigram outKey = new Bigram(first, second);
-			context.write(outKey, new FloatWritable(prob));
+			String outVal = second + '\t' + prob.toString();
+			context.write(new Text(first), new Text(outVal));
 		}
     }
 }
