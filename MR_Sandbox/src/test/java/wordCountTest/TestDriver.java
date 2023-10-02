@@ -68,5 +68,6 @@ public class TestDriver {
         mapReduceDriver.addOutput(new Text("cat"), new IntWritable(2));
         mapReduceDriver.addOutput(new Text("hat"), new IntWritable(1));
         mapReduceDriver.addOutput(new Text("the"), new IntWritable(2));
+        mapReduceDriver.runTest();
     } 
 }
