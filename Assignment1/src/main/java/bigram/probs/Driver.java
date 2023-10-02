@@ -14,7 +14,6 @@ import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 
-
 import org.apache.hadoop.mapreduce.Counters;
 
 
@@ -30,10 +29,11 @@ public class Driver extends Configured implements Tool{
 
 	@Override
 	public int run(String[] args) throws Exception {
+		//intermediate output files
 		String countJobOut = "count-job-out";
 		String probJobOut = "prob-job-out";
-		
-		/////////// count number of each bigrams, global counter for total number of bigrams ///////////
+
+		/////////// count number of each bigram, global counter for total number of bigrams ///////////
         Job countJob = Job.getInstance(getConf());
         countJob.setJobName("BigramCount");
         countJob.setJarByClass(Driver.class);
@@ -64,14 +64,14 @@ public class Driver extends Configured implements Tool{
         Job probJob = Job.getInstance(getConf());
         probJob.setJobName("BigramProb");
         probJob.setJarByClass(Driver.class);
-        probJob.getConfiguration().setLong(Driver.COUNTERS.BIGRAMCOUNT.name(), counter);	//set counter to probJob
+        probJob.getConfiguration().setLong(Driver.COUNTERS.BIGRAMCOUNT.name(), counter);	//read in global bigram counter for use in mapper
 
         probJob.setMapperClass(ProbMapper.class);
         probJob.setNumReduceTasks(0);
 
         probJob.setOutputKeyClass(Bigram.class);
         probJob.setOutputValueClass(FloatWritable.class);
-        
+
         //if probOutPath already exists, remove existing file
         Path probOutPath = new Path(probJobOut);
 		if (fs.exists(probOutPath)) {
@@ -80,23 +80,23 @@ public class Driver extends Configured implements Tool{
 
         FileInputFormat.addInputPath(probJob, countOutPath);
         FileOutputFormat.setOutputPath(probJob, probOutPath);
-        
+
         probJob.waitForCompletion(true);
-        
+
         /////////// find most likely bigram starting with the word 'possible' ///////////
         Job possibleJob = Job.getInstance(getConf());
         possibleJob.setJobName("BigramPossible");
         possibleJob.setJarByClass(Driver.class);
-        
+
         possibleJob.setMapperClass(PossibleMapper.class);
         possibleJob.setReducerClass(PossibleReducer.class);	
         possibleJob.setNumReduceTasks(1);		//avoids multiple empty output files, only one active reducer used anyway due to mapping scheme 
-        
+
         possibleJob.setMapOutputKeyClass(Text.class);
         possibleJob.setMapOutputValueClass(Text.class);
         possibleJob.setOutputKeyClass(Bigram.class);	
         possibleJob.setOutputValueClass(FloatWritable.class);
-        
+
         FileInputFormat.addInputPath(possibleJob, probOutPath);
         FileOutputFormat.setOutputPath(possibleJob, new Path(args[1]));
 
