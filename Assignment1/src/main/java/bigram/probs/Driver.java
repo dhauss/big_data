@@ -31,8 +31,7 @@ public class Driver extends Configured implements Tool{
 		String countJobOut = "count-job-out";
 		
 		/////////// count number of each bigrams, global counter for total number of bigrams ///////////
-        Configuration countConf = new Configuration();
-        Job countJob = Job.getInstance(countConf);
+        Job countJob = Job.getInstance(getConf());
         countJob.setJobName("BigramCount");
         countJob.setJarByClass(Driver.class);
 
@@ -45,7 +44,7 @@ public class Driver extends Configured implements Tool{
 
         //if countOutPath already exists, remove existing file
         Path countOutPath = new Path(countJobOut);
-		FileSystem fs = FileSystem.get(countConf);
+		FileSystem fs = FileSystem.get(getConf());
 		if (fs.exists(countOutPath)) {
 			fs.delete(countOutPath, true);
 		}
@@ -59,8 +58,7 @@ public class Driver extends Configured implements Tool{
         Counters counters = countJob.getCounters();
         Long counter = counters.findCounter(COUNTERS.BIGRAMCOUNT).getValue();	//save counter from countJob
 
-        Configuration conf2 = new Configuration();
-        Job probJob = Job.getInstance(conf2);
+        Job probJob = Job.getInstance(getConf());
         probJob.setJobName("BigramProb");
         probJob.setJarByClass(Driver.class);
         probJob.getConfiguration().setLong(Driver.COUNTERS.BIGRAMCOUNT.name(), counter);	//set counter to probJob
