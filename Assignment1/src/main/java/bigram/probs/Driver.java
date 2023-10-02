@@ -18,7 +18,7 @@ import org.apache.hadoop.mapreduce.Counters;
 
 
 public class Driver extends Configured implements Tool{
-	public enum COUNTERS {		//global counter to keep track of total number of (non-unique) bigrams
+	public enum COUNTERS {		//global counter to keep track of total number of bigrams
 		  BIGRAMCOUNT
 		 }
 
@@ -90,9 +90,9 @@ public class Driver extends Configured implements Tool{
 
         possibleJob.setMapperClass(PossibleMapper.class);
         possibleJob.setReducerClass(PossibleReducer.class);	
-        possibleJob.setNumReduceTasks(1);		//avoids multiple empty output files, only one active reducer used anyway due to mapping scheme 
+        possibleJob.setNumReduceTasks(1);		//avoids overhead from creating multiple unused reducers and multiple empty output files
 
-        possibleJob.setMapOutputKeyClass(Text.class);
+        possibleJob.setMapOutputKeyClass(Text.class);	//mapper and reducer output not the same 
         possibleJob.setMapOutputValueClass(Text.class);
         possibleJob.setOutputKeyClass(Bigram.class);	
         possibleJob.setOutputValueClass(FloatWritable.class);

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.Reducer.Context;
 
 public class CountReducer extends Reducer<Bigram, LongWritable, Bigram, LongWritable>{
     private LongWritable result = new LongWritable();

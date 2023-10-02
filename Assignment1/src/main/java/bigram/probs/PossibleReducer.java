@@ -3,10 +3,8 @@ package bigram.probs;
 import java.io.IOException;
 
 import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.Reducer.Context;
 
 public class PossibleReducer extends Reducer<Text, Text, Bigram, FloatWritable> {
 	Bigram maxBigram = new Bigram();
