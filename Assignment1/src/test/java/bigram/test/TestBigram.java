@@ -56,7 +56,7 @@ public class TestBigram {
 
     @Test
     public void testMapper() throws IOException{
-    	mapDriver.withInput(new LongWritable(1), new Text("the, cat aNd;;    the Blue. tHe cat haT./;;"));
+    	mapDriver.withInput(new LongWritable(1), new Text("the, cat aNd;;    the <div> Blue.</div> tHe cat haT./;;"));
     	mapDriver.withOutput(new Bigram("the", "cat"), new LongWritable(1));
     	mapDriver.withOutput(new Bigram("cat", "and"), new LongWritable(1));
     	mapDriver.withOutput(new Bigram("and", "the"), new LongWritable(1));
@@ -98,7 +98,7 @@ public class TestBigram {
 
     @Test
     public void testMapperReducer() throws IOException{
-    	mapReduceDriver.addInput(new LongWritable(1), new Text("the, cat aNd;;    the Blue. tHe cat haT./;;"));
+    	mapReduceDriver.addInput(new LongWritable(1), new Text("the, cat aNd;;  <p>  the Blue. tHe cat haT./;;"));
     	mapReduceDriver.addOutput(new Bigram("and", "the"), new LongWritable(1));
     	mapReduceDriver.addOutput(new Bigram("blue", "the"), new LongWritable(1));
     	mapReduceDriver.addOutput(new Bigram("cat", "and"), new LongWritable(1));
