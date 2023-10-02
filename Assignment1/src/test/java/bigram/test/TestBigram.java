@@ -17,13 +17,13 @@ import bigram.probs.Bigram;
 import bigram.probs.CountMapper;
 import bigram.probs.PossibleMapper;
 import bigram.probs.CountReducer;
-
-
+import bigram.probs.PossibleReducer;
 
 public class TestBigram {
     MapDriver<LongWritable, Text, Bigram, LongWritable> mapDriver;
-    MapDriver<LongWritable, Text, Bigram, FloatWritable> possibleMapDriver;
+    MapDriver<LongWritable, Text, Text, Text> possibleMapDriver;
     ReduceDriver<Bigram, LongWritable, Bigram, LongWritable> reduceDriver;
+    ReduceDriver<Text, Text, Bigram, FloatWritable> possibleReduceDriver;
     MapReduceDriver<LongWritable, Text, Bigram, LongWritable, Bigram, LongWritable> mapReduceDriver;
     
     @Before
@@ -35,12 +35,18 @@ public class TestBigram {
 
         //possibleJob Mapper
         PossibleMapper mapper2 = new PossibleMapper();
-        possibleMapDriver = new MapDriver<LongWritable, Text, Bigram, FloatWritable>();
+        possibleMapDriver = new MapDriver<LongWritable, Text, Text, Text>();
         possibleMapDriver.setMapper(mapper2);
 
+        //countJob Reducer
         CountReducer reducer1 = new CountReducer();
         reduceDriver = new ReduceDriver<Bigram, LongWritable, Bigram, LongWritable>();
         reduceDriver.setReducer(reducer1);
+
+        //possibleJob Reducer
+        PossibleReducer reducer2 = new PossibleReducer();
+        possibleReduceDriver = new ReduceDriver<Text, Text, Bigram, FloatWritable>();
+        possibleReduceDriver.setReducer(reducer2);
 
         mapReduceDriver = new MapReduceDriver<LongWritable, Text, Bigram, LongWritable, Bigram, LongWritable>();
         mapReduceDriver.setMapper(mapper1);
@@ -62,9 +68,9 @@ public class TestBigram {
     
     @Test
     public void TestMapper2() throws IOException{
-    	possibleMapDriver.withInput(new LongWritable(1), new Text("possible\tbigram\t.00234"));
-    	possibleMapDriver.withInput(new LongWritable(2), new Text("impossible\tbigram\t.00234"));
-    	possibleMapDriver.withOutput(new Bigram("possible", "bigram"), new FloatWritable(.00234F));
+    	possibleMapDriver.withInput(new LongWritable(1), new Text("possible\tbigram\t0.00234"));
+    	possibleMapDriver.withInput(new LongWritable(2), new Text("impossible\tbigram\t0.00234"));
+    	possibleMapDriver.withOutput(new Text("possible"), new Text("bigram\t0.00234"));
     	possibleMapDriver.runTest();
     }
 
@@ -76,6 +82,17 @@ public class TestBigram {
     	reduceDriver.withInput(new Bigram("the", "cat"), values);
     	reduceDriver.withOutput(new Bigram("the", "cat"), new LongWritable(2));
     	reduceDriver.runTest();
+    }
+    
+    @Test
+    public void testReducer2() throws IOException{
+    	List<Text> values = new ArrayList<>();
+    	values.add(new Text("bigram\t0.00234"));
+    	values.add(new Text("biggie\t0.000234"));
+    	values.add(new Text("bigrams\t0.00235"));
+    	possibleReduceDriver.withInput(new Text("possible"), values);
+    	possibleReduceDriver.withOutput(new Bigram("possible", "bigrams"), new FloatWritable(0.00235F));
+    	possibleReduceDriver.runTest();
     }
 
     @Test

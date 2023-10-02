@@ -1,7 +1,6 @@
 package bigram.probs;
 
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
@@ -13,6 +12,9 @@ import org.apache.hadoop.util.ToolRunner;
 
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+
+
 import org.apache.hadoop.mapreduce.Counters;
 
 
@@ -29,6 +31,7 @@ public class Driver extends Configured implements Tool{
 	@Override
 	public int run(String[] args) throws Exception {
 		String countJobOut = "count-job-out";
+		String probJobOut = "prob-job-out";
 		
 		/////////// count number of each bigrams, global counter for total number of bigrams ///////////
         Job countJob = Job.getInstance(getConf());
@@ -68,10 +71,35 @@ public class Driver extends Configured implements Tool{
 
         probJob.setOutputKeyClass(Bigram.class);
         probJob.setOutputValueClass(FloatWritable.class);
+        
+        //if probOutPath already exists, remove existing file
+        Path probOutPath = new Path(probJobOut);
+		if (fs.exists(probOutPath)) {
+			fs.delete(probOutPath, true);
+		}
 
-        FileInputFormat.addInputPath(probJob, new Path(countJobOut));
-        FileOutputFormat.setOutputPath(probJob, new Path(args[1]));
+        FileInputFormat.addInputPath(probJob, countOutPath);
+        FileOutputFormat.setOutputPath(probJob, probOutPath);
+        
+        probJob.waitForCompletion(true);
+        
+        /////////// find most likely bigram starting with the word 'possible' ///////////
+        Job possibleJob = Job.getInstance(getConf());
+        possibleJob.setJobName("BigramPossible");
+        possibleJob.setJarByClass(Driver.class);
+        
+        possibleJob.setMapperClass(PossibleMapper.class);
+        possibleJob.setReducerClass(PossibleReducer.class);	
+        possibleJob.setNumReduceTasks(1);		//avoids multiple empty output files, only one active reducer used anyway due to mapping scheme 
+        
+        possibleJob.setMapOutputKeyClass(Text.class);
+        possibleJob.setMapOutputValueClass(Text.class);
+        possibleJob.setOutputKeyClass(Bigram.class);	
+        possibleJob.setOutputValueClass(FloatWritable.class);
+        
+        FileInputFormat.addInputPath(possibleJob, probOutPath);
+        FileOutputFormat.setOutputPath(possibleJob, new Path(args[1]));
 
-        return probJob.waitForCompletion(true) ? 0 : 1;
+        return possibleJob.waitForCompletion(true) ? 0 : 1;
 	}
 }

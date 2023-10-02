@@ -16,8 +16,9 @@ public class CountMapper extends Mapper<LongWritable, Text, Bigram, LongWritable
     public void map(LongWritable key, Text value, Context context)
     		throws IOException, InterruptedException {
 
-    	//normalize to lower case, no punctuation, and remove consecutive spaces
+    	//normalize to lower case, remove all html tags, remove punctuation, and remove consecutive spaces
     	String line = value.toString().toLowerCase();
+    	line = line.replaceAll("\\<.*?\\>", "");
     	line = line.replaceAll("[^\\sa-z0-9]", "");
     	line = line.replaceAll("\\s{2,}", " ");
 
