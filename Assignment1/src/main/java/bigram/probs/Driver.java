@@ -16,7 +16,6 @@ import org.apache.hadoop.io.Text;
 
 import org.apache.hadoop.mapreduce.Counters;
 
-
 public class Driver extends Configured implements Tool{
 	public enum COUNTERS {		//global counter to keep track of total number of bigrams
 		  BIGRAMCOUNT
