@@ -15,10 +15,13 @@ public class PossibleMapper extends Mapper<LongWritable, Text, Text, Text> {
 		String first = vals[0];
 		String second = vals[1];
 		Float prob = Float.parseFloat(vals[2]);
+		StringBuilder out = new StringBuilder();
 		
 		if(first.equals("possible")) {
-			String outVal = second + '\t' + prob.toString();
-			context.write(new Text(first), new Text(outVal));
+			out.append(second);
+			out.append("\t");
+			out.append(prob.toString());
+			context.write(new Text(first), new Text(out.toString()));
 		}
     }
 }
