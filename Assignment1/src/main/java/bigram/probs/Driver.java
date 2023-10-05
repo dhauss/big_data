@@ -89,6 +89,7 @@ public class Driver extends Configured implements Tool{
         possibleJob.setJarByClass(Driver.class);
 
         possibleJob.setMapperClass(PossibleMapper.class);
+        possibleJob.setCombinerClass(PossibleReducer.class);
         possibleJob.setReducerClass(PossibleReducer.class);	
         possibleJob.setNumReduceTasks(1);		//avoids overhead from creating multiple unused reducers and multiple empty output files
 
