@@ -33,4 +33,4 @@ PossibleReducer:
 Iterates through all local max 'possible' bigrams, outputs only the global max as key: Bigram, val: probability
 
 # Test Cases
-Basic functionality tests to ensure mapper and reducer classes are correct before runnings on HDFS
+Basic functionality MRUnit tests to ensure mapper and reducer classes are correct before runnings on HDFS
