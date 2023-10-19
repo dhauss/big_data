@@ -12,16 +12,16 @@ Driver:
 Driver program responsible for configuring the MapReduce jobs. Intermediate output files defined as 'count-job-out' and 'prob-job-out', automatically deletes existent intermediate files. Passes global Hadoop counter from countJob to probJob, and sets 0 reducers for probJob and 1 reducer for possibleJob to reduce overhead and empty output files. 
 
 Bigram:
-A custom Bigram class, contains two private Text attributes representing the First and Second word in a bigram. Implements writeableComparable for serialization and sorting in HDFS. 
+A custom bigram class, contains two private Text attributes representing the First and Second word in a bigram. Implements writeableComparable for serialization and sorting in HDFS. 
 
 CountMapper:
-Parses out punctuation, HTML tags, and consecutive white space, then maps each bigram in the input to key: Bigram, val: 1. Also increments a global Hadoop counter to track total number of bigrams in file
+Parses out punctuation, HTML tags, and consecutive white space, then maps each bigram in the input to key: bigram, val: 1. Also increments a global Hadoop counter to track total number of bigrams in file
 
 CountReducer:
 Simple counting reducer, iterates through and sums all values for a given Bigram key. Effectively counts the number of occurrences of each unique bigram in input
 
 ProbMapper:
-Maps each unique bigram to key: bigram, val: probability by divided its count by the global count from countJob. Probability is represented as a float
+Maps each unique bigram to key: bigram, val: probability, calculated by dividing its count by the global count from countJob. Probability is represented as a float
 
 PossibleMapper:
 Filters out all bigrams that do not begin with the word 'possible', then maps the 'possible' bigrams to key: 'possible', val: 'second/tprobability', both represented as Text objects. This allows all bigrams to be mapped to the same key after significant filtering so that the reducer can find a global max
@@ -32,5 +32,5 @@ Largely the same function as the PossibleReducer, finds local max 'possible' big
 PossibleReducer:
 Iterates through all local max 'possible' bigrams, outputs only the global max as key: Bigram, val: probability
 
-Test Cases:
+# Test Cases
 Basic functionality tests to ensure mapper and reducer classes are correct before runnings on HDFS
