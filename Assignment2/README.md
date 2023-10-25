@@ -26,7 +26,7 @@ In the first cell (Cmd 11), I first read in the data and normalize the words to 
 
 In the first cell (Cmd 13), I transform the parsed words column, which was normalized and had its punctuation removed but had not yet been exploded, and convert each row into an array of strings using 'split'. This is a requirement for using the NGram feature from the pyspark.ml.feature library. I define the bigram transformation, as well as the input and output columns, before applying the transformation on this DF. The result is a DF where all rows are an array of bigrams as well as the original array of word strings. I remove the 'words' input column before exploding the bigram column to obtain a DF where each row is a bigram. I then group by bigram and count in order to count the unique bigrams in the DF. After this, I sort the resulting DF by the count column in descending order and show the first 10 columns to provide the solution
 
-## Question 7
+## Question 7: Geolocations
 
 I first defined a UDF to use in both parts a and b. It takes in two columns of coordinate strings, converts the strings to tuples of floats and passes them to the haversine function with the units defined as miles. It returns a column of the haversine distance between the two coordinates in miles
 
@@ -34,6 +34,6 @@ I first defined a UDF to use in both parts a and b. It takes in two columns of c
 
 I first filter the rest_data_raw DF from Q3 to define a new DF with only the active, food service restaurants. I then drop any rows with null geolocation values, as these null values would break the haversine UDF. I then use the haversine UDF to create a new column, 'Distance(mi)', passing in a column of the origin coordinates using the lit() function as well as the geolocation column. I obtain the final results by sorting this DF, and then show the top result with only the columns 'Premise_name', 'Status', 'Rpt_Area_Desc', 'geolocation', and 'Distance(mi)' for readability.
 
-# Part B
+# Part B: With that restaurant as your center point, find the number of foreclosures within a 1 mile radius
 
 I save the coordinates from the part a's result using collect(), and then read in the json dataset. I create a DF with only the geocode subfield from this dataset, as that is all that is required to answer the question. I again remove rows with null values for coordinates. Because my original haversine UDF accepts strings, I cast the geocode column, originally a list of floats, to a string column and remove the brackets. The list values would require some casting either way to be able to use the haversine function, so this seemed to be an acceptable, though somewhat bulky, solution. I again create a 'Distance(mi)' column in the same way as part A, and proceed to filter out all distances over 1 mile. For the final result, I simply print out the count of the resulting DF
