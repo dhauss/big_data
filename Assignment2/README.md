@@ -6,23 +6,34 @@ Program first reads in the BreadBasket_DMS csv file and filters out all NONE ent
 
 SAMPLE ANSWER:
 
-+-----------------+----------+--------+
 |             Item|      Date|Quantity|
-+-----------------+----------+--------+
+
 |         Focaccia|2016-11-03|       1|
+
 |          Tartine|2016-11-04|       1|
+
 |            Bread|2016-12-13|       4|
+
 |           Coffee|2017-01-05|       7|
+
 |     Scandinavian|2017-01-20|       1|
+
 |         Art Tray|2017-01-24|       1|
+
 |            Bread|2017-03-22|       6|
+
 | Coffee granules |2017-03-25|       1|
+
 |           Muffin|2016-11-14|       1|
+
 |           Coffee|2016-11-24|       7|
+
 |Gingerbread syrup|2016-12-21|       1|
+
 |           Coffee|2017-01-06|       8|
+
 |     Scandinavian|2017-01-07|       3|
-+_________________+__________+________+
+
 
 
 ## Question 2: Show the top 3 (by qty) items bought by Daypart, by DayType
