@@ -6,7 +6,7 @@ Anomaly Detection
 1. For each model, compute the bi-monthly failure rate R per model: F = number of failures per model, O = number of cumulative days in operation per model, D = number of days between Jan 1, 2019 and March 28, 2019, inclusive:
 
 
-\\[R = 100.0 * \left(\frac{1.0 * F}{O \div D}\right)\\]
+$R = 100.0 * \left(\frac{1.0 * F}{O \div D}\right)$
 
 
 2. Given R per model, find the mean M and standard deviation S
