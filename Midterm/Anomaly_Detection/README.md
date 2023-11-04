@@ -1,4 +1,3 @@
-%md
 <h1 style="text-align: center;">
 Anomaly Detection 
 </h1>
