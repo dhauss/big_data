@@ -40,8 +40,8 @@ Calculate Mean, Standard Deviation, Failure Prediction Threshold
 
 Mean and standard deviation are calculated using built-in PySpark functions and saved to a dataframe. They are then saved as const variables, summed and assigned to the FAIL_PREDICT const variable in order to create dataframe of failure predictions in the final cell. The final lines of the cell simply prints each variable for manual error checking
 
-<h2 style="text-align: center;">
+<h3 style="text-align: center;">
 Hard Drive Failure Prediction Final Result
-</h2>
+</h3>
 
 The final result is calculated by simply filtering out all models at or below the failure rate threshold and showing the resulting dataframe, sorted in descending order by likelihood of failure
