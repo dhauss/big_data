@@ -21,6 +21,12 @@ public class ResDriver extends Configured implements Tool{
 
 	@Override
 	public int run(String[] args) throws Exception {
+		
+        if(args.length !=2){
+            System.err.println("Usage: <input path> <output path>");
+            return -1;
+        }
+		
         Job resJob = Job.getInstance(getConf());
         resJob.setJobName("ReservoirSampling");
         resJob.setJarByClass(ResDriver.class);
