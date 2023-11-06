@@ -16,28 +16,28 @@ public class ResMapper extends Mapper<LongWritable, Text, LongWritable, Text>{
 	String[] reservoir = new String[K];
 	//Random object for computing j, which determines if an element will replace a reservoir entry
 	Random rand = new Random();
-	
+
     public void map(LongWritable key, Text value, Context context) {
     	//split csv file by line breaks to create array of rows
     	String[] rows = value.toString().split("\n");
-    	
+
     	int i = 0;
     	//iterate through input, apply reservoir sampling algo to fill reservoir
     	for(String row: rows) {
     		//initially fill reservoir with first K elements
     		if(i < K) {
-    			reservoir[i] = new String(row);
+    			reservoir[i] = row;
     			i++;
     		} else {
     		//compute random int, j, to decide if ith element will replace jth element in reservoir
     			int j = rand.nextInt(i);
     			if(j < K) {
-    				reservoir[j] = new String(row);
+    				reservoir[j] = row;
     			}
     			i++;
     		}
     	}
-    	
+
     	// write final reservoir to output
     	for(String out: reservoir) {
     		// if reservoir is not filled, avoid writing null entries to context
