@@ -1,6 +1,12 @@
 # Hadoop MapReduce Reservoir Sampling
 Implements the reservoir sampling algorithm for Hadoop MapReduce where K = 10000 (saved as const variables in the mapper and reducer classes). Designed to receive csv logs as input, will output K sample rows into a single output file
 
+To run in HDFS, run the following command:
+
+<div style="text-align: center;">
+hadoop jar rs.jar res.sampling.ResDriver <input directory> <output directory>
+</div>
+
 ## ResDriver
 
 ## ResMapper
