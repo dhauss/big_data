@@ -1,12 +1,17 @@
 package res.sampling;
 
 import org.apache.hadoop.conf.Configured;
+
 import org.apache.hadoop.fs.Path;
+
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
+
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.Job;
+
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -32,9 +37,12 @@ public class ResDriver extends Configured implements Tool{
         resJob.setJarByClass(ResDriver.class);
         
         resJob.setMapperClass(ResMapper.class);
-        resJob.setNumReduceTasks(0);
+        resJob.setReducerClass(ResReducer.class);
+        resJob.setNumReduceTasks(1);
 
-        resJob.setOutputKeyClass(LongWritable.class);
+        resJob.setMapOutputKeyClass(LongWritable.class);
+        resJob.setMapOutputValueClass(Text.class);
+        resJob.setOutputKeyClass(IntWritable.class);
         resJob.setOutputValueClass(Text.class);
         
         FileInputFormat.addInputPath(resJob, new Path(args[0]));
