@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 
@@ -46,7 +45,7 @@ public class ResReducer extends Reducer<NullWritable, Text, IntWritable, Text>{
     		if(out == null) {
     			break;
     		} else {
-    			//use IntWritable as key to enumerate rows
+    			//use IntWritable as key to enumerate rows, unlikely K will ever exceed 2 billion
     			context.write(new IntWritable(i), out);
     			i++;
     		}
