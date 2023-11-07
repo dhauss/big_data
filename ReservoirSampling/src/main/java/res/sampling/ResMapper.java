@@ -18,7 +18,8 @@ public class ResMapper extends Mapper<LongWritable, Text, NullWritable, Text>{
 	//Random object for computing j, which determines if an element will replace a reservoir entry
 	Random rand = new Random();
 
-    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+    public void map(LongWritable key, Text value, Context context)
+    		throws IOException, InterruptedException {
     	//split csv file by line breaks to create array of rows
     	String[] rows = value.toString().split("\n");
 

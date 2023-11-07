@@ -17,10 +17,10 @@ public class ResReducer extends Reducer<NullWritable, Text, IntWritable, Text>{
 	Text[] reservoir = new Text[K];
 	//Random object for computing j, which determines if an element will replace a reservoir entry
 	Random rand = new Random();
-	
+
     public void reduce(NullWritable key, Iterable<Text> values, Context context)
 			throws IOException, InterruptedException {
-    	
+
     	int i = 0;
     	for(Text row: values) {
     		//initially fill reservoir with first K elements
@@ -38,6 +38,7 @@ public class ResReducer extends Reducer<NullWritable, Text, IntWritable, Text>{
     			i++;
     		}
     	}
+
     	i = 1;
     	// write final reservoir to output
     	for(Text out: reservoir) {
