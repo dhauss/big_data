@@ -3,9 +3,9 @@ Implements the reservoir sampling algorithm for Hadoop MapReduce where K = 10000
 
 To run in HDFS, run the following command:
 
-<div style="text-align: center;">
-hadoop jar rs.jar res.sampling.ResDriver <input directory> <output directory>
-</div>
+<p style="text-align: center;">
+hadoop jar rs.jar res.sampling.ResDriver /<input directory/> /<output directory/>
+</p>
 
 ## ResDriver
 
