@@ -1,6 +1,8 @@
 package res.sampling;
 
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 
 import org.apache.hadoop.mapreduce.Mapper;
@@ -9,7 +11,7 @@ import java.io.IOException;
 import java.util.Random;
 
 
-public class ResMapper extends Mapper<LongWritable, Text, LongWritable, Text>{
+public class ResMapper extends Mapper<LongWritable, Text, NullWritable, Text>{
 	//size of random sample
 	static final int K = 10000;
 	//array to save current random sample in memory
@@ -17,7 +19,7 @@ public class ResMapper extends Mapper<LongWritable, Text, LongWritable, Text>{
 	//Random object for computing j, which determines if an element will replace a reservoir entry
 	Random rand = new Random();
 
-    public void map(LongWritable key, Text value, Context context) {
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
     	//split csv file by line breaks to create array of rows
     	String[] rows = value.toString().split("\n");
 
@@ -44,15 +46,10 @@ public class ResMapper extends Mapper<LongWritable, Text, LongWritable, Text>{
     		if(out == null) {
     			break;
     		} else {
-    			try {
-    				//arbitrary key of 1 to send all data to single reducer (output size limited to number of mappers * K)
-    				//replaces multiple commas with single comma for output readability given plethora of null entries in dataset
-    				context.write(new LongWritable(1), new Text(out.replaceAll(",{2,}", ",")));
-    			} catch (IOException e) {
-    				e.printStackTrace();
-    			} catch (InterruptedException e) {
-    				e.printStackTrace();
-    			}
+    			//NullWritable key to send all data to single reducer (output size limited to number of mappers * K)
+    			//replaces multiple commas with single comma for output readability given plethora of null entries in dataset
+    			//context.write(new IntWritable(1), new Text(out.replaceAll(",{2,}", ",")));
+    			context.write(NullWritable.get(), new Text(out.replaceAll(",{2,}", ",")));
     		}
     	}
     }

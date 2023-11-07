@@ -3,14 +3,15 @@ package res.sampling;
 import java.io.IOException;
 import java.util.Random;
 
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 
 import org.apache.hadoop.mapreduce.Reducer;
 
 
-public class ResReducer extends Reducer<LongWritable, Text, IntWritable, Text>{
+public class ResReducer extends Reducer<NullWritable, Text, IntWritable, Text>{
 	//size of random sample
 	static final int K = 10000;
 	//array to save current random sample in memory
@@ -18,7 +19,7 @@ public class ResReducer extends Reducer<LongWritable, Text, IntWritable, Text>{
 	//Random object for computing j, which determines if an element will replace a reservoir entry
 	Random rand = new Random();
 	
-    public void reduce(LongWritable key, Iterable<Text> values, Context context)
+    public void reduce(NullWritable key, Iterable<Text> values, Context context)
 			throws IOException, InterruptedException {
     	
     	int i = 0;
