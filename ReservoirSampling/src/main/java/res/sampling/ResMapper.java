@@ -47,7 +47,6 @@ public class ResMapper extends Mapper<LongWritable, Text, NullWritable, Text>{
     		} else {
     			//NullWritable key to send all data to single reducer (output size limited to number of mappers * K)
     			//replaces multiple commas with single comma for output readability given plethora of null entries in dataset
-    			//context.write(new IntWritable(1), new Text(out.replaceAll(",{2,}", ",")));
     			context.write(NullWritable.get(), new Text(out.replaceAll(",{2,}", ",")));
     		}
     	}
