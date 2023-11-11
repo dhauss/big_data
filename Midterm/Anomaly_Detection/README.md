@@ -39,8 +39,26 @@ Calculate Mean, Standard Deviation, Failure Prediction Threshold
 
 Mean and standard deviation are calculated using built-in PySpark functions and saved to a dataframe. They are then saved as const variables, summed and assigned to the FAIL_PREDICT const variable in order to create dataframe of failure predictions in the final cell. The final lines of the cell simply prints each variable for manual error checking
 
-<h3 style="text-align: center;">
-Hard Drive Failure Prediction Final Result
-</h3>
+<h2 style="text-align: center;">
+Hard Drive Failure Prediction By Model
+</h2>
 
-The final result is calculated by simply filtering out all models at or below the failure rate threshold and showing the resulting dataframe, sorted in descending order by likelihood of failure
+This result is calculated by simply filtering out all models at or below the failure rate threshold and showing the resulting dataframe, sorted in descending order by likelihood of failure
+
+<h2 style="text-align: center;">
+Hard Drive Failure Predictions Saved to List
+</h2>
+
+Hard drive predicted failure models are saved to a list. This could also be a string variable, but saving it in the list format allows for a dataset in which more than one model is likely to fail
+
+<h2 style="text-align: center;">
+Create dataframe with all HDs in operation on March 29
+</h2>
+
+Go back to raw data set to create a dataframe consisting of all HDs in operation on March 29 with serial number column included
+
+<h1 style="text-align: center;">
+Hard Drive Failure Predictions Final Result
+</h1>
+
+Filter dataframe with all HDs in operation on March 29th to show only those whose models are likely to fail using isin() function with the model_fails list saved earlier
