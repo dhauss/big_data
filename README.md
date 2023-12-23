@@ -5,7 +5,7 @@ Assignment 1: Bigram counting and probability program in Hadoop MapReduce. See [
 
 Assignment 2: PySpark analytical exercises. See [Assignment2 README](https://github.com/dhauss/big_data/tree/main/Assignment2) for more details
 
-ReservoirSampling: Reservoir sampling algorithm implemented in Hadoop MapReduce. See [README](https://github.com/dhauss/big_data/tree/main/ReservoirSampling) in subfolder for details
+ReservoirSampling: Reservoir sampling algorithm implemented in Hadoop MapReduce. See [ReservoirSampling README](https://github.com/dhauss/big_data/tree/main/ReservoirSampling) for details
 
 Midterm: [Anomaly](https://github.com/dhauss/big_data/tree/main/Midterm/Anomaly_Detection) and [Duplicate](https://github.com/dhauss/big_data/tree/main/Midterm/Duplicate_Detection) detection in PySpark. See linked READMEs for details
 
